@@ -33,4 +33,9 @@ class AuthProvider extends ChangeNotifier {
     _isLoggedIn = false;
     notifyListeners();
   }
+
+  void setLoggedIn() {
+    _isLoggedIn = true;
+    notifyListeners();
+  }
 }

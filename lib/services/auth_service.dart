@@ -36,4 +36,32 @@ class AuthService {
     final token = await getToken();
     return token != null;
   }
+
+  Future<String?> registrar({
+    required String nombre,
+    required String apellido,
+    required String email,
+    required String telefono,
+    required String password,
+  }) async {
+    final response = await http.post(
+      Uri.parse('${ApiConfig.baseUrl}/auth/usuario/registro'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'nombre': nombre,
+        'apellido': apellido,
+        'email': email,
+        'telefono': telefono,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_tokenKey, data['token']);
+      return data['token'];
+    }
+    return null;
+  }
 }
