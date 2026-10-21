@@ -5,6 +5,7 @@ import '../models/turno.dart';
 import '../services/turno_service.dart';
 import '../services/reserva_service.dart';
 import '../utils/errores.dart';
+import 'crear_partido_screen.dart';
 
 class TurnosScreen extends StatefulWidget {
   final Complejo complejo;
@@ -57,25 +58,28 @@ class _TurnosScreenState extends State<TurnosScreen> {
 
     if (confirmar != true) return;
 
-    final bool success;
     try {
-      success = await _reservaService.crearReserva(turno.id);
+      await _reservaService.crearReserva(turno.id);
     } catch (e) {
       if (mounted) mostrarError(context, e);
       return;
     }
     if (!mounted) return;
 
-    if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('¡Reserva confirmada!'), backgroundColor: Colors.green),
-      );
-      _loadTurnos();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No se pudo realizar la reserva'), backgroundColor: Colors.red),
-      );
-    }
+    // Con la cancha reservada ya se puede armar un partido para buscar jugadores
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('¡Reserva confirmada!'),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 6),
+        action: SnackBarAction(
+          label: 'BUSCAR JUGADORES',
+          textColor: Colors.white,
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CrearPartidoScreen())),
+        ),
+      ),
+    );
+    _loadTurnos();
   }
 
   @override
@@ -107,7 +111,7 @@ class _TurnosScreenState extends State<TurnosScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF1565C0).withOpacity(0.1),
+                                  color: const Color(0xFF1565C0).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Icon(Icons.access_time, color: Color(0xFF1565C0)),

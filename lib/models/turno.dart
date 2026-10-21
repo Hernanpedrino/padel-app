@@ -1,3 +1,5 @@
+import '../utils/formato.dart';
+
 class Cancha {
   final String id;
   final String nombre;
@@ -34,9 +36,9 @@ class Turno {
   factory Turno.fromJson(Map<String, dynamic> json) {
     return Turno(
       id: json['id'],
-      fechaHoraInicio: DateTime.parse(json['fechaHoraInicio']),
-      fechaHoraFin: DateTime.parse(json['fechaHoraFin']),
-      precio: double.parse(json['precio'].toString()),
+      fechaHoraInicio: fechaLocal(json['fechaHoraInicio']),
+      fechaHoraFin: fechaLocal(json['fechaHoraFin']),
+      precio: precioDe(json['precio']),
       estado: json['estado'],
       cancha: Cancha.fromJson(json['cancha']),
     );

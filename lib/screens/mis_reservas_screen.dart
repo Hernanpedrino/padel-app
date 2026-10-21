@@ -52,21 +52,18 @@ class _MisReservasScreenState extends State<MisReservasScreen> {
 
     if (confirmar != true) return;
 
-    final bool success;
     try {
-      success = await _reservaService.cancelarReserva(reserva.id);
+      await _reservaService.cancelarReserva(reserva.id);
     } catch (e) {
       if (mounted) mostrarError(context, e);
       return;
     }
     if (!mounted) return;
 
-    if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Reserva cancelada'), backgroundColor: Colors.orange),
-      );
-      _loadReservas();
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Reserva cancelada'), backgroundColor: Colors.orange),
+    );
+    _loadReservas();
   }
 
   @override
@@ -99,7 +96,7 @@ class _MisReservasScreenState extends State<MisReservasScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: cancelada ? Colors.grey.withOpacity(0.1) : const Color(0xFF1565C0).withOpacity(0.1),
+                                  color: cancelada ? Colors.grey.withValues(alpha: 0.1) : const Color(0xFF1565C0).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(
@@ -113,6 +110,8 @@ class _MisReservasScreenState extends State<MisReservasScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(reserva.turno.cancha.nombre, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                    if (reserva.complejoNombre != null)
+                                      Text(reserva.complejoNombre!, style: const TextStyle(color: Colors.grey, fontSize: 12)),
                                     const SizedBox(height: 4),
                                     Text(DateFormat('EEEE dd/MM', 'es').format(reserva.turno.fechaHoraInicio)),
                                     Text('${DateFormat('HH:mm').format(reserva.turno.fechaHoraInicio)} - ${DateFormat('HH:mm').format(reserva.turno.fechaHoraFin)}'),
@@ -120,7 +119,7 @@ class _MisReservasScreenState extends State<MisReservasScreen> {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                       decoration: BoxDecoration(
-                                        color: cancelada ? Colors.red.withOpacity(0.1) : Colors.green.withOpacity(0.1),
+                                        color: cancelada ? Colors.red.withValues(alpha: 0.1) : Colors.green.withValues(alpha: 0.1),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(

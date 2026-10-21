@@ -1,0 +1,40 @@
+[
+  {
+    "id": "bd8c1eb3-28b5-4906-9827-df1b1f772e06",
+    "claseId": "51a6f09a-6586-4d2b-88cd-3c6146b4cf67",
+    "usuarioId": "96547c2e-81d7-4dc8-9460-93064935a202",
+    "estado": "PENDIENTE",
+    "creadoEn": "2026-10-21T17:37:01.421Z",
+    "clase": {
+      "id": "51a6f09a-6586-4d2b-88cd-3c6146b4cf67",
+      "complejoId": "29fad82e-2910-425c-aed7-1f2a030a61cd",
+      "canchaId": "bb00ee1e-e8b1-4c9a-bca2-382c958a38b9",
+      "profesor": "PRUEBA Profe",
+      "nivel": "SEXTA",
+      "descripcion": null,
+      "fechaHoraInicio": "2026-10-24T13:00:00.000Z",
+      "fechaHoraFin": "2026-10-24T14:00:00.000Z",
+      "cupo": 4,
+      "precio": "8000",
+      "estado": "PUBLICADA",
+      "creadoEn": "2026-10-21T17:37:01.344Z",
+      "cancha": {
+        "id": "bb00ee1e-e8b1-4c9a-bca2-382c958a38b9",
+        "complejoId": "29fad82e-2910-425c-aed7-1f2a030a61cd",
+        "nombre": "Cancha 2",
+        "tipo": "cemento",
+        "activa": true
+      },
+      "complejo": {
+        "id": "29fad82e-2910-425c-aed7-1f2a030a61cd",
+        "organizacionId": "c61473f4-6adc-4dad-84b3-5641b2babbcc",
+        "nombre": "Complejo Padel Demo",
+        "direccion": "Av. Siempre Viva 123",
+        "telefono": "3414000000",
+        "email": "demo@padel.com",
+        "pagosHabilitados": true,
+        "creadoEn": "2026-10-21T15:03:41.216Z"
+      }
+    }
+  }
+]

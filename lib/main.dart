@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_shell.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
@@ -44,6 +44,6 @@ class AuthGate extends StatelessWidget {
       );
     }
 
-    return auth.isLoggedIn ? const HomeScreen() : const LoginScreen();
+    return auth.isLoggedIn ? const MainShell() : const LoginScreen();
   }
 }

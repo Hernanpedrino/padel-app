@@ -1,0 +1,30 @@
+[
+  {
+    "tipo": "SOLICITUDES_PARTIDO",
+    "titulo": "Un jugador quiere sumarse a tu partido",
+    "detalle": "Complejo Padel Demo",
+    "fecha": "2026-10-23T23:00:00.000Z",
+    "refId": "28c56d76-96d8-453f-ac87-5c6e1acf4cfb"
+  },
+  {
+    "tipo": "RESERVA_PROXIMA",
+    "titulo": "Tenés reservada la Cancha 1",
+    "detalle": "Complejo Padel Demo",
+    "fecha": "2026-10-23T23:00:00.000Z",
+    "refId": "d28c1133-2b67-467e-a6e8-f2e2ca00a85d"
+  },
+  {
+    "tipo": "INSCRIPCION_TORNEO",
+    "titulo": "Inscripción pendiente de confirmación: PRUEBA Torneo",
+    "detalle": "Complejo Padel Demo",
+    "fecha": "2026-10-31T03:00:00.000Z",
+    "refId": "a744eb1e-bdbc-4844-b17e-21bf05d7e78b"
+  },
+  {
+    "tipo": "INSCRIPCION_CLASE",
+    "titulo": "Clase pendiente de confirmación con PRUEBA Profe",
+    "detalle": "Complejo Padel Demo",
+    "fecha": "2026-10-24T13:00:00.000Z",
+    "refId": "51a6f09a-6586-4d2b-88cd-3c6146b4cf67"
+  }
+]

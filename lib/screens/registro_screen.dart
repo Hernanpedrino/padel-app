@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../config/api.dart';
 import '../providers/auth_provider.dart';
 import '../services/auth_service.dart';
-import 'home_screen.dart';
 
 class RegistroScreen extends StatefulWidget {
   const RegistroScreen({super.key});
@@ -39,12 +38,8 @@ class _RegistroScreenState extends State<RegistroScreen> {
 
       if (token != null && mounted) {
         context.read<AuthProvider>().setLoggedIn();
-        if (mounted) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const HomeScreen()),
-            (route) => false,
-          );
-        }
+        // AuthGate (la primera ruta) ya muestra la pantalla principal: se vuelve a ella
+        Navigator.of(context).popUntil((route) => route.isFirst);
       } else if (mounted) {
         setState(() {
           _error = 'El email ya está registrado';
@@ -55,10 +50,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
     } catch (e) {
       if (mounted) setState(() => _error = 'Error al registrarse. Intentá de nuevo.');
     } finally {
-      if (mounted)
-        setState(() {
-          _loading = false;
-        });
+      if (mounted) setState(() => _loading = false);
     }
   }
 

@@ -1,47 +1,16 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../config/api.dart';
 import '../models/reserva.dart';
-import 'auth_service.dart';
+import 'api_client.dart';
 
+// Los errores (turno ya tomado, etc.) llegan como ApiException con el mensaje del backend
 class ReservaService {
-  final AuthService _authService = AuthService();
+  final ApiClient _api = ApiClient();
 
   Future<List<Reserva>> getMisReservas() async {
-    final token = await _authService.getToken();
-    final response = await http.get(
-      Uri.parse('${ApiConfig.baseUrl}/reservas/mis-reservas'),
-      headers: {'Authorization': 'Bearer $token'},
-    ).timeout(ApiConfig.timeout);
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      return data.map((json) => Reserva.fromJson(json)).toList();
-    }
-    return [];
+    final List<dynamic> data = await _api.get('/reservas/mis-reservas');
+    return data.map((json) => Reserva.fromJson(json)).toList();
   }
 
-  Future<bool> crearReserva(String turnoId) async {
-    final token = await _authService.getToken();
-    final response = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/reservas'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({'turnoId': turnoId}),
-    ).timeout(ApiConfig.timeout);
+  Future<void> crearReserva(String turnoId) => _api.post('/reservas', {'turnoId': turnoId});
 
-    return response.statusCode == 201;
-  }
-
-  Future<bool> cancelarReserva(String reservaId) async {
-    final token = await _authService.getToken();
-    final response = await http.patch(
-      Uri.parse('${ApiConfig.baseUrl}/reservas/$reservaId/cancelar'),
-      headers: {'Authorization': 'Bearer $token'},
-    ).timeout(ApiConfig.timeout);
-
-    return response.statusCode == 200;
-  }
+  Future<void> cancelarReserva(String reservaId) => _api.patch('/reservas/$reservaId/cancelar');
 }

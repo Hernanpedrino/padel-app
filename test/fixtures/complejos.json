@@ -1,0 +1,28 @@
+[
+  {
+    "id": "29fad82e-2910-425c-aed7-1f2a030a61cd",
+    "organizacionId": "c61473f4-6adc-4dad-84b3-5641b2babbcc",
+    "nombre": "Complejo Padel Demo",
+    "direccion": "Av. Siempre Viva 123",
+    "telefono": "3414000000",
+    "email": "demo@padel.com",
+    "pagosHabilitados": true,
+    "creadoEn": "2026-10-21T15:03:41.216Z",
+    "canchas": [
+      {
+        "id": "5b756c6d-b3ac-48dd-b305-e90b5f8cf5a8",
+        "complejoId": "29fad82e-2910-425c-aed7-1f2a030a61cd",
+        "nombre": "Cancha 1",
+        "tipo": "cristal",
+        "activa": true
+      },
+      {
+        "id": "bb00ee1e-e8b1-4c9a-bca2-382c958a38b9",
+        "complejoId": "29fad82e-2910-425c-aed7-1f2a030a61cd",
+        "nombre": "Cancha 2",
+        "tipo": "cemento",
+        "activa": true
+      }
+    ]
+  }
+]

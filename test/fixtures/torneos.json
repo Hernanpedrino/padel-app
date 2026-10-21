@@ -1,0 +1,30 @@
+[
+  {
+    "id": "a744eb1e-bdbc-4844-b17e-21bf05d7e78b",
+    "complejoId": "29fad82e-2910-425c-aed7-1f2a030a61cd",
+    "nombre": "PRUEBA Torneo",
+    "descripcion": null,
+    "categoria": "SEXTA",
+    "rama": "MASCULINO",
+    "fechaInicio": "2026-10-31T03:00:00.000Z",
+    "fechaFin": "2026-11-02T02:00:00.000Z",
+    "cierreInscripcion": "2026-10-30T02:00:00.000Z",
+    "cupoParejas": 8,
+    "precioInscripcion": "10000",
+    "estado": "PUBLICADO",
+    "creadoEn": "2026-10-21T17:37:01.261Z",
+    "complejo": {
+      "id": "29fad82e-2910-425c-aed7-1f2a030a61cd",
+      "organizacionId": "c61473f4-6adc-4dad-84b3-5641b2babbcc",
+      "nombre": "Complejo Padel Demo",
+      "direccion": "Av. Siempre Viva 123",
+      "telefono": "3414000000",
+      "email": "demo@padel.com",
+      "pagosHabilitados": true,
+      "creadoEn": "2026-10-21T15:03:41.216Z"
+    },
+    "_count": {
+      "inscripciones": 0
+    }
+  }
+]
