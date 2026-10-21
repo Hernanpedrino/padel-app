@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../config/api.dart';
 import '../providers/auth_provider.dart';
 import '../services/auth_service.dart';
 import 'home_screen.dart';
@@ -49,10 +50,10 @@ class _RegistroScreenState extends State<RegistroScreen> {
           _error = 'El email ya está registrado';
         });
       }
+    } on SinConexionException catch (e) {
+      if (mounted) setState(() => _error = e.toString());
     } catch (e) {
-      setState(() {
-        _error = 'Error al registrarse. Intentá de nuevo.';
-      });
+      if (mounted) setState(() => _error = 'Error al registrarse. Intentá de nuevo.');
     } finally {
       if (mounted)
         setState(() {

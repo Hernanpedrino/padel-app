@@ -4,6 +4,7 @@ import '../models/complejo.dart';
 import '../models/turno.dart';
 import '../services/turno_service.dart';
 import '../services/reserva_service.dart';
+import '../utils/errores.dart';
 
 class TurnosScreen extends StatefulWidget {
   final Complejo complejo;
@@ -26,11 +27,14 @@ class _TurnosScreenState extends State<TurnosScreen> {
   }
 
   Future<void> _loadTurnos() async {
-    final turnos = await _turnoService.getTurnosDisponibles(widget.complejo.id);
-    setState(() {
-      _turnos = turnos;
-      _loading = false;
-    });
+    try {
+      final turnos = await _turnoService.getTurnosDisponibles(widget.complejo.id);
+      if (mounted) setState(() => _turnos = turnos);
+    } catch (e) {
+      if (mounted) mostrarError(context, e);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   Future<void> _reservar(Turno turno) async {
@@ -53,7 +57,13 @@ class _TurnosScreenState extends State<TurnosScreen> {
 
     if (confirmar != true) return;
 
-    final success = await _reservaService.crearReserva(turno.id);
+    final bool success;
+    try {
+      success = await _reservaService.crearReserva(turno.id);
+    } catch (e) {
+      if (mounted) mostrarError(context, e);
+      return;
+    }
     if (!mounted) return;
 
     if (success) {

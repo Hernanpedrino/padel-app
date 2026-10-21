@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../models/complejo.dart';
 import '../services/turno_service.dart';
+import '../utils/errores.dart';
 import 'turnos_screen.dart';
 import 'mis_reservas_screen.dart';
 
@@ -25,11 +26,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadComplejos() async {
-    final complejos = await _turnoService.getComplejos();
-    setState(() {
-      _complejos = complejos;
-      _loading = false;
-    });
+    try {
+      final complejos = await _turnoService.getComplejos();
+      if (mounted) setState(() => _complejos = complejos);
+    } catch (e) {
+      if (mounted) mostrarError(context, e);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   @override

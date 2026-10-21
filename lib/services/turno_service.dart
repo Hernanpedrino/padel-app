@@ -11,7 +11,7 @@ class TurnoService {
   Future<List<Complejo>> getComplejos() async {
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/complejos'),
-    );
+    ).timeout(ApiConfig.timeout);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -23,7 +23,7 @@ class TurnoService {
   Future<List<Turno>> getTurnosDisponibles(String complejoId) async {
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/turnos/disponibles/$complejoId'),
-    );
+    ).timeout(ApiConfig.timeout);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../config/api.dart';
 import '../providers/auth_provider.dart';
 import 'registro_screen.dart';
 
@@ -22,14 +23,24 @@ class _LoginScreenState extends State<LoginScreen> {
       _error = null;
     });
 
-    final success = await context.read<AuthProvider>().login(
-      _emailController.text.trim(),
-      _passwordController.text,
-    );
+    final auth = context.read<AuthProvider>();
+    String? error;
+    try {
+      final success = await auth.login(
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
+      if (!success) error = 'Email o contraseña incorrectos';
+    } on SinConexionException catch (e) {
+      error = e.toString();
+    } catch (_) {
+      error = 'Ocurrió un error inesperado. Intentá de nuevo.';
+    }
 
-    if (!success && mounted) {
+    // Si el login salió bien, AuthGate reemplaza esta pantalla
+    if (error != null && mounted) {
       setState(() {
-        _error = 'Email o contraseña incorrectos';
+        _error = error;
         _loading = false;
       });
     }

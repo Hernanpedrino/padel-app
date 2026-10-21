@@ -12,7 +12,7 @@ class ReservaService {
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/reservas/mis-reservas'),
       headers: {'Authorization': 'Bearer $token'},
-    );
+    ).timeout(ApiConfig.timeout);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -30,7 +30,7 @@ class ReservaService {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode({'turnoId': turnoId}),
-    );
+    ).timeout(ApiConfig.timeout);
 
     return response.statusCode == 201;
   }
@@ -40,7 +40,7 @@ class ReservaService {
     final response = await http.patch(
       Uri.parse('${ApiConfig.baseUrl}/reservas/$reservaId/cancelar'),
       headers: {'Authorization': 'Bearer $token'},
-    );
+    ).timeout(ApiConfig.timeout);
 
     return response.statusCode == 200;
   }

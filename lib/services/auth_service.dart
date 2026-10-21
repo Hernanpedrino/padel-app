@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api.dart';
@@ -6,12 +8,26 @@ import '../config/api.dart';
 class AuthService {
   static const String _tokenKey = 'token';
 
+  Future<http.Response> _post(String ruta, Map<String, dynamic> body) async {
+    try {
+      return await http
+          .post(
+            Uri.parse('${ApiConfig.baseUrl}$ruta'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(body),
+          )
+          .timeout(ApiConfig.timeout);
+    } on TimeoutException {
+      throw SinConexionException();
+    } on SocketException {
+      throw SinConexionException();
+    } on http.ClientException {
+      throw SinConexionException();
+    }
+  }
+
   Future<bool> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/auth/usuario/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
+    final response = await _post('/auth/usuario/login', {'email': email, 'password': password});
 
     if (response.statusCode == 201) {
       final data = jsonDecode(response.body);
@@ -44,17 +60,13 @@ class AuthService {
     required String telefono,
     required String password,
   }) async {
-    final response = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/auth/usuario/registro'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'nombre': nombre,
-        'apellido': apellido,
-        'email': email,
-        'telefono': telefono,
-        'password': password,
-      }),
-    );
+    final response = await _post('/auth/usuario/registro', {
+      'nombre': nombre,
+      'apellido': apellido,
+      'email': email,
+      'telefono': telefono,
+      'password': password,
+    });
 
     if (response.statusCode == 201) {
       final data = jsonDecode(response.body);

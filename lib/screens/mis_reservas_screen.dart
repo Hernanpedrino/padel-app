@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/reserva.dart';
 import '../services/reserva_service.dart';
+import '../utils/errores.dart';
 
 class MisReservasScreen extends StatefulWidget {
   const MisReservasScreen({super.key});
@@ -22,11 +23,14 @@ class _MisReservasScreenState extends State<MisReservasScreen> {
   }
 
   Future<void> _loadReservas() async {
-    final reservas = await _reservaService.getMisReservas();
-    setState(() {
-      _reservas = reservas;
-      _loading = false;
-    });
+    try {
+      final reservas = await _reservaService.getMisReservas();
+      if (mounted) setState(() => _reservas = reservas);
+    } catch (e) {
+      if (mounted) mostrarError(context, e);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   Future<void> _cancelar(Reserva reserva) async {
@@ -48,7 +52,13 @@ class _MisReservasScreenState extends State<MisReservasScreen> {
 
     if (confirmar != true) return;
 
-    final success = await _reservaService.cancelarReserva(reserva.id);
+    final bool success;
+    try {
+      success = await _reservaService.cancelarReserva(reserva.id);
+    } catch (e) {
+      if (mounted) mostrarError(context, e);
+      return;
+    }
     if (!mounted) return;
 
     if (success) {
