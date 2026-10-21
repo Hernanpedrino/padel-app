@@ -1,17 +1,18 @@
 class ApiConfig {
-  // Se puede cambiar sin tocar código: flutter run --dart-define=API_URL=http://<ip-de-la-pc>:3002
+  // En desarrollo con el celular por USB: `adb reverse tcp:3002 tcp:3002` y localhost
+  // llega al backend de la PC sin depender del WiFi.
+  // Para otra dirección: flutter run --dart-define=API_URL=http://<ip-de-la-pc>:3002
   static const String baseUrl = String.fromEnvironment(
     'API_URL',
-    defaultValue: 'http://192.168.1.191:3002',
+    defaultValue: 'http://localhost:3002',
   );
 
-  // Si el backend no responde en este tiempo la llamada falla en vez de quedar esperando
+  // Si el servidor no responde en este tiempo la llamada falla en vez de quedar esperando
   static const Duration timeout = Duration(seconds: 10);
 }
 
-// Error de red (backend caído, otra red, timeout) para mostrar un mensaje claro
+// Error de red (sin conexión, servidor caído, timeout); el mensaje lo ve el usuario final
 class SinConexionException implements Exception {
   @override
-  String toString() =>
-      'No se pudo conectar con el servidor. Revisá que estés en la misma red WiFi y que el backend esté levantado.';
+  String toString() => 'No se pudo conectar. Revisá tu conexión a internet e intentá de nuevo.';
 }
