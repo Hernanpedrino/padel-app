@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:padel_app/models/clase.dart';
 import 'package:padel_app/models/complejo.dart';
+import 'package:padel_app/models/notificacion.dart';
 import 'package:padel_app/models/novedad.dart';
 import 'package:padel_app/models/partido.dart';
 import 'package:padel_app/models/perfil.dart';
@@ -60,6 +61,16 @@ void main() {
     final i = inscripciones.first;
     expect(i.estado, 'PENDIENTE');
     expect(i.companeroDe(i.jugador1.id).nombre, 'PRUEBA');
+  });
+
+  test('notificaciones', () {
+    final bandeja = BandejaNotificaciones.fromJson(fixture('notificaciones'));
+    expect(bandeja.noLeidas, 1);
+    final n = bandeja.items.first;
+    expect(n.tipo, 'SOLICITUD_ACEPTADA');
+    expect(n.titulo, '¡Te confirmaron en el partido!');
+    expect(n.leida, isFalse);
+    expect(n.refId, isNotNull);
   });
 
   test('clases', () {

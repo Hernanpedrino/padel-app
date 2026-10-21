@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/notificacion.dart';
+import '../providers/notificaciones_provider.dart';
+import '../utils/navegacion.dart';
 import 'complejos_screen.dart';
 import 'inicio_screen.dart';
 import 'partidos_screen.dart';
@@ -18,6 +22,49 @@ class _MainShellState extends State<MainShell> {
 
   int _indice = inicio;
   final _inicioKey = GlobalKey<InicioScreenState>();
+  late final NotificacionesProvider _notificaciones;
+
+  @override
+  void initState() {
+    super.initState();
+    // Mientras la app está abierta se consultan las notificaciones y se avisa de las nuevas
+    _notificaciones = context.read<NotificacionesProvider>()
+      ..onNueva = _avisar
+      ..iniciar();
+  }
+
+  @override
+  void dispose() {
+    // Al cerrar sesión se deja de consultar
+    _notificaciones
+      ..onNueva = null
+      ..detener();
+    super.dispose();
+  }
+
+  void _avisar(Notificacion n) {
+    if (!mounted) return;
+    final destino = pantallaDeAviso(n.tipo, n.refId);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(n.titulo, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(n.cuerpo, maxLines: 2, overflow: TextOverflow.ellipsis),
+          ],
+        ),
+        duration: const Duration(seconds: 6),
+        behavior: SnackBarBehavior.floating,
+        action: destino == null
+            ? null
+            : SnackBarAction(label: 'VER', onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => destino))),
+      ),
+    );
+    // Novedades de Inicio también cambian (ej. partido confirmado)
+    _inicioKey.currentState?.cargar();
+  }
 
   void _irA(int indice) {
     setState(() => _indice = indice);

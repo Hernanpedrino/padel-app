@@ -1,0 +1,15 @@
+{
+  "noLeidas": 1,
+  "items": [
+    {
+      "id": "ed936ce3-87c2-4a5a-aeb8-570ba797777b",
+      "usuarioId": "e1d754d4-a5e1-4800-abf3-a51941c56e42",
+      "tipo": "SOLICITUD_ACEPTADA",
+      "titulo": "¡Te confirmaron en el partido!",
+      "cuerpo": "Jugás el lun 26/10 07:00 en Blindex Padel",
+      "refId": "a96534fd-ff22-4d1e-ae4d-a9e5a4172a91",
+      "leida": false,
+      "creadoEn": "2026-10-21T18:28:14.267Z"
+    }
+  ]
+}

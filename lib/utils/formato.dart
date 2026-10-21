@@ -40,3 +40,14 @@ String formatoDiaHora(DateTime fecha) => '${formatoDiaCorto(fecha)} · ${formato
 String formatoPrecio(double precio) => '\$${NumberFormat.decimalPattern('es').format(precio)}';
 
 double precioDe(dynamic valor) => double.parse(valor.toString());
+
+// "hace 5 min", "hace 3 h", "ayer", o la fecha si pasó más de una semana
+String hace(DateTime fecha) {
+  final diferencia = DateTime.now().difference(fecha);
+  if (diferencia.inMinutes < 1) return 'recién';
+  if (diferencia.inMinutes < 60) return 'hace ${diferencia.inMinutes} min';
+  if (diferencia.inHours < 24) return 'hace ${diferencia.inHours} h';
+  if (diferencia.inDays == 1) return 'ayer';
+  if (diferencia.inDays < 7) return 'hace ${diferencia.inDays} días';
+  return formatoDiaCorto(fecha);
+}

@@ -3,13 +3,15 @@ import 'package:provider/provider.dart';
 import '../models/complejo.dart';
 import '../models/novedad.dart';
 import '../providers/auth_provider.dart';
+import '../providers/notificaciones_provider.dart';
 import '../services/usuario_service.dart';
 import '../utils/errores.dart';
 import '../utils/formato.dart';
+import '../utils/navegacion.dart';
 import '../widgets/comunes.dart';
 import 'clases_screen.dart';
 import 'mis_reservas_screen.dart';
-import 'partido_detalle_screen.dart';
+import 'notificaciones_screen.dart';
 import 'torneos_screen.dart';
 import 'turnos_screen.dart';
 
@@ -37,6 +39,7 @@ class InicioScreenState extends State<InicioScreen> {
 
   Future<void> cargar() async {
     final auth = context.read<AuthProvider>();
+    context.read<NotificacionesProvider>().refrescar();
     try {
       final resultados = await Future.wait([_usuarioService.novedades(), _usuarioService.favoritos()]);
       if (auth.perfil == null) await auth.recargarPerfil();
@@ -58,27 +61,27 @@ class InicioScreenState extends State<InicioScreen> {
   }
 
   void _abrirNovedad(Novedad n) {
-    switch (n.tipo) {
-      case 'SOLICITUDES_PARTIDO':
-      case 'PARTIDO_CONFIRMADO':
-        _abrir(PartidoDetalleScreen(partidoId: n.refId));
-      case 'RESERVA_PROXIMA':
-        _abrir(const MisReservasScreen());
-      case 'TORNEO_ABIERTO':
-        _abrir(const TorneosScreen());
-      case 'INSCRIPCION_TORNEO':
-        _abrir(const TorneosScreen(pestanaInicial: 1));
-      case 'INSCRIPCION_CLASE':
-        _abrir(const ClasesScreen(pestanaInicial: 1));
-    }
+    final destino = pantallaDeAviso(n.tipo, n.refId);
+    if (destino != null) _abrir(destino);
   }
 
   @override
   Widget build(BuildContext context) {
     final perfil = context.watch<AuthProvider>().perfil;
+    final noLeidas = context.watch<NotificacionesProvider>().noLeidas;
 
     return Scaffold(
-      appBar: barraApp('Padel App'),
+      appBar: barraApp('Padel App', acciones: [
+        IconButton(
+          tooltip: 'Notificaciones',
+          icon: Badge(
+            isLabelVisible: noLeidas > 0,
+            label: Text(noLeidas > 99 ? '99+' : '$noLeidas'),
+            child: Icon(noLeidas > 0 ? Icons.notifications_active : Icons.notifications_none),
+          ),
+          onPressed: () => _abrir(const NotificacionesScreen()),
+        ),
+      ]),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(

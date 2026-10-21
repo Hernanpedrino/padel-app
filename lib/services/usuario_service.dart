@@ -1,4 +1,5 @@
 import '../models/complejo.dart';
+import '../models/notificacion.dart';
 import '../models/novedad.dart';
 import '../models/perfil.dart';
 import 'api_client.dart';
@@ -24,4 +25,9 @@ class UsuarioService {
   Future<void> agregarFavorito(String complejoId) => _api.post('/usuarios/me/favoritos/$complejoId');
 
   Future<void> quitarFavorito(String complejoId) => _api.delete('/usuarios/me/favoritos/$complejoId');
+
+  Future<BandejaNotificaciones> notificaciones() async =>
+      BandejaNotificaciones.fromJson(await _api.get('/usuarios/me/notificaciones'));
+
+  Future<void> marcarNotificacionesLeidas() => _api.patch('/usuarios/me/notificaciones/leidas');
 }
