@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/notificacion.dart';
 import '../providers/notificaciones_provider.dart';
+import '../services/push_service.dart';
 import '../utils/navegacion.dart';
 import 'complejos_screen.dart';
 import 'inicio_screen.dart';
@@ -23,6 +25,7 @@ class _MainShellState extends State<MainShell> {
   int _indice = inicio;
   final _inicioKey = GlobalKey<InicioScreenState>();
   late final NotificacionesProvider _notificaciones;
+  List<StreamSubscription> _suscripcionesPush = [];
 
   @override
   void initState() {
@@ -31,11 +34,29 @@ class _MainShellState extends State<MainShell> {
     _notificaciones = context.read<NotificacionesProvider>()
       ..onNueva = _avisar
       ..iniciar();
+
+    // Push: un aviso con la app abierta refresca la campana (y muestra el aviso en pantalla);
+    // tocar una notificación del sistema lleva a su partido, torneo o clase
+    final push = PushService();
+    push.registrar();
+    _suscripcionesPush = push.escuchar(
+      onRecibido: _notificaciones.refrescar,
+      onAbierto: (aviso) {
+        _notificaciones.refrescar();
+        final destino = pantallaDeAviso(aviso.tipo, aviso.refId);
+        if (destino != null && mounted) {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => destino));
+        }
+      },
+    );
   }
 
   @override
   void dispose() {
     // Al cerrar sesión se deja de consultar
+    for (final s in _suscripcionesPush) {
+      s.cancel();
+    }
     _notificaciones
       ..onNueva = null
       ..detener();

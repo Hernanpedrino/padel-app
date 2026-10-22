@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Configuracion de Firebase del proyecto (contiene la clave de API)
+android/app/google-services.json

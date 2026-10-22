@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/perfil.dart';
 import '../services/api_client.dart';
 import '../services/auth_service.dart';
+import '../services/push_service.dart';
 import '../services/usuario_service.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -56,8 +57,12 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    if (_isLoggedIn) {
+      // Primero se marca la salida: si la baja del celular responde 401 no se vuelve a entrar acá
+      _isLoggedIn = false;
+      await PushService().darDeBaja();
+    }
     await _authService.logout();
-    _isLoggedIn = false;
     _perfil = null;
     notifyListeners();
   }
